@@ -54,7 +54,7 @@ In this variable, the **Sold ** and **Bad Debt ** classes do not provide a signi
 
 
 
-**CNT_CREDIT_PROLONG **
+**CNT_CREDIT_PROLONG**
 
 ---
 
@@ -78,7 +78,7 @@ CNT_CREDIT_PROLONG : has 10 unique category 	- int64
 
 
 
-**CREDIT_TYPE **
+**CREDIT_TYPE**
 
 ------
 
@@ -108,7 +108,7 @@ Expresses the customer delaying other loans in days ;
 
 
 
-**DAYS_CREDİT_ENDDATE **
+**DAYS_CREDİT_ENDDATE**
 
 ------
 
