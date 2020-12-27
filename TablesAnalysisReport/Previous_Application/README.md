@@ -209,7 +209,7 @@ x-sell              456287  1670214  27.319074     0.260003
 
 ------
 
-Sales area of the previous application's customer
+Sales area of the previous application's customer.
 
 ```python
 CHANNEL_TYPE : has 8 unique category 	- object
