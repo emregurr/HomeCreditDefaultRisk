@@ -20,33 +20,37 @@
 
 ------
 
-Müsteri mevcut başvurudan kaç gün önce Kredi bürosuna başvurdu.(Başka bir kredi için)(Gün bazlı değişken)
+The customer applied to the Credit office several days before the current application. (For another loan) (Variable based on days)
 
-min değerimiz 2922 ve bu değer 8 yıla tekabül ediyor.
+Our min value is 2922 and this value corresponds to 8 years.
 
-![](./images/days_credit.png)
+![](C:\Users\acer\Desktop\HomeCreditDefaultRisk\TablesAnalysisReport\Bureau\images\days_credit.png)
 
--1000 günden yüksek değerlerde farklılık gözlemlendi.
+Differences were observed at values higher than -1000 days.
+
+
 
 **CREDIT_CURRENCY**
 
 ------
 
-Kredi bürosunun kredisinin yeniden kodlanmış para birimi şeklinde tanımlanıyor.
+It is defined as the recoded currency of the credit bureau's loan.
 
-4 adet alt grubu var bunlar : 
+There are 4 subgroups:
 
 ```
 currency 1 , currency 2 , currency 3 , currency 4  
 ```
 
+
+
 **CREDIT_ACTIVE**
 
 ------
 
-Durumu bildirilen krediler  **Closed** , **Active** , **Sold** , **Bad Deb**t şeklinde alt kümelere sahip.
+Credits with reported status have subsets of **Closed**, **Active **, **Sold **, **Bad Debt.**
 
-Bu değişkende **Sold** ve **Bad Debt**  sınıfları verisetinde az olmasından dolayı anlamlı bir farklılık sağlamıyor bu sebeple **Active** olarak atanabilir.
+In this variable, the **Sold ** and **Bad Debt ** classes do not provide a significant difference due to the small number in the dataset, so they can be assigned as **Active **.
 
 
 
@@ -54,7 +58,7 @@ Bu değişkende **Sold** ve **Bad Debt**  sınıfları verisetinde az olmasında
 
 ---
 
-Kredinin kaç kez uzatıldıgını gösteren değişken. 
+Variable indicating how many times the loan has been extended.
 
 ```python
 CNT_CREDIT_PROLONG : has 10 unique category 	- int64
@@ -78,7 +82,7 @@ CNT_CREDIT_PROLONG : has 10 unique category 	- int64
 
 ------
 
-Kredi tipini gösteren değişken 15 kategorisi var ;
+There are 15 categories of variables that show the loan type;
 
 ```python
 CREDIT_TYPE : has 15 unique category    - object                                              CREDIT_TYPE    Count Ratio  
@@ -94,13 +98,13 @@ CREDIT_TYPE : has 15 unique category    - object                                
 
 ------
 
-Müşterinin diğer kredilerini geciktirme durumlarını gün olarak ifade ediyor
+Expresses the customer delaying other loans in days ;
 
-```
-0: geciktirmemiş 1: geciktirmiş olarak kodlanabilir
+```python
+# 0: not delayed 1: delayed
 ```
 
-**UYGULANMADI**
+**NOT APPLIED **
 
 
 
@@ -108,15 +112,11 @@ Müşterinin diğer kredilerini geciktirme durumlarını gün olarak ifade ediyo
 
 ------
 
-Kredi başvurusundan kaç gün önce önceki kredisinin bittiği ya da kaç günleri kaldıgı bilgisini verir.
-
-Yapılan sektör araştırmalarına göre dünya da en uzun görülen kredi türü olan mortgage da 50 yıl saptanmıştır oguz bey tarafından.
-
-En yaşlı başvuran kişi 69 yaşındadır. Bu kişi 18 yaşında krediye başvurmuş olsa dahi 50 yıllık ödemeyi karsılayabilecek yaş seviyesindedir. Bunu göz önünde bulundurarak days credit değişkeninde max sınırımızı 50 yıl olarak alacağız. 50 yıldan uzun olan verileri atacağız.
-
-0 dan geriye gidenler  ödemesini tamamlayan kitleyi oluşturur. Credit_Active durumları : CLOSED
-
-0 dan pozitif yönde hareket edenlerin ödemesi devam etmektedir. Credit_Active durumları : ACTIVE
+- It gives the information about how many days before the loan application expired or how many days left.
+- According to sector researches, mortgage, which is the longest loan type in the world, was determined for 50 years by Oguz.
+- The oldest applicant is 69 years old. Even if this person applied for a loan at the age of 18, he is at the age of 50 years to afford the payment. With this in mind, we will take our max limit as 50 years in the days credit variable. We will discard data over 50 years.
+- Those who go back from 0 form the audience that completed their payment. Credit_Active statuses: **CLOSED**
+- Payments of those who move in a positive direction from 0 continue. Credit_Active statuses: **ACTIVE**
 
 
 
@@ -124,9 +124,8 @@ En yaşlı başvuran kişi 69 yaşındadır. Bu kişi 18 yaşında krediye başv
 
 ------
 
-Ev kredisi başvurusu sırasında Credi bürosunda bulunan eski kredisinin sona ermesinden bu yana geçen süre gün cinsinden ( Yalnızca kapalı kredi ). Maximum değer 0 gorüldü bunun sebesi ise yalnızca kapalı olan yani ödemesi sone ermiş kredilerin bu değişkende yer alması.
-
-Days_credit_enddate ve days_enddate_fact değigskenlerinde minumum değerlerin -42023  (115 yıla yakın bir değere tekabül ediyor.)(oldugu tespit edilmiş ve bu değere gürültü adı verilmiştir.
+- The period in days since the expiry of the old loan at the Credi office at the time of the home loan application (Closed loan only). The maximum value was seen as 0, and the reason for this is that only the loans that are closed, that is to be paid, are included in this variable.
+- The minimum values in the **DAYS_CREDİT_ENDDATE and DAYS_ENDDATE_FACT** variables were found to be -42023 (corresponding to a value close to 115 years) and these values were abnormal and this value was called noise.
 
 
 
@@ -134,13 +133,9 @@ Days_credit_enddate ve days_enddate_fact değigskenlerinde minumum değerlerin -
 
 ------
 
-Kredi bürosu  bulunan kredisinde su ana kadar gecikmiş maksimum kredi tutarı(Home Credit Kredi basvuru tarihine kadar)
-
-Eksik değerler denklem dısında tutuldugunda (112.000)
-
-None değerlere mantıklı olması sebebi ile 0 atandı bu durum model olusturulduktan sonra kontrol edilecek.
-
-Değişken incelendiğinde  müşterilerin %75 inin gecikmis kredi ödemesi bulunmamakta. Gecikmis olanları ise geciktirilmiş miktarlarına göre sınıflandırabiliriz.
-
-%99 dan büyük olan dilim incelendiğinde en düşük borç tutarı 41.989 oldugu görüldü.En yüksek tutar ise 115.987.185 oldugu görüldü.
+- The maximum amount of overdue credit in the loan with a credit bureau (until the Home Credit Loan application date)
+- When missing values are excluded from the equation (112,000)
+- Since it makes sense to None values, 0 is assigned, this will be checked after the model is created.
+- When the variable is analyzed, 75% of the customers do not have delayed loan payments. We can classify the delayed ones according to their delayed amounts.
+- When the slice larger than 99% was analyzed, it was seen that the lowest debt amount was 41.989, while the highest amount was 115.987.185.
 

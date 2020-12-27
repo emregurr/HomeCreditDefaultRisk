@@ -8,7 +8,7 @@
 
 ------
 
-Önceki başvurunun sözleşme ürün türü (Nakit kredi, tüketici kredisi [POS], ...)
+Contract product type of the previous application (Cash loan, consumer loan [POS], ...)
 
 ```python
                     NAME_CONTRACT_TYPE    Count      Ratio  TARGET_MEAN
@@ -19,7 +19,7 @@ Revolving loans                 193164  1670214  11.565225     0.493819
 XNA                                346  1670214   0.020716     1.000000
 ```
 
-*Çıkarımlar* : Consumer loans olanların temerrüte düşme oranlarının azlığı dikkat çekiyor.
+*Inferences* : The low default rate of those with **consumer loans** draws attention.
 
 
 
@@ -27,7 +27,7 @@ XNA                                346  1670214   0.020716     1.000000
 
 ------
 
-Müşteri önceki başvuru için haftanın hangi gününde başvurdu?
+What day of the week did the customer apply for the previous application?
 
 ```python
      WEEKDAY_APPR_PROCESS_START    Count      Ratio  TARGET_MEAN
@@ -40,7 +40,7 @@ TUESDAY                        255118  1670214  15.274570     0.393496
 WEDNESDAY                      255010  1670214  15.268103     0.389538
 ```
 
-*Çıkarımlar* : Atılabilir
+*Inferences* : It can be thrown away.
 
 
 
@@ -56,7 +56,7 @@ N                         8475  1670214   0.50742     1.000000
 Y                      1661739  1670214  99.49258     0.360178
 ```
 
-*Çıkarımlar* :  Atılabilir.
+*Inferences* :  It can be thrown away.
 
 
 
@@ -64,7 +64,7 @@ Y                      1661739  1670214  99.49258     0.360178
 
 ------
 
-Uygulama, istemcinin günlük son uygulamasıysa işaretleyin. Bazen müşteriler günde daha fazla başvuru için başvurur. Nadiren sistemimizde bir uygulamanın veritabanında iki kez olması da hata olabilir
+Check if the application is the client's last daily application. Sometimes clients apply for more applications per day. Rarely, it may be an error in our system to have an application twice in the database.
 
 ```
 NFLAG_LAST_APPL_IN_DAY    Count      Ratio  TARGET_MEAN
@@ -72,7 +72,7 @@ NFLAG_LAST_APPL_IN_DAY    Count      Ratio  TARGET_MEAN
 1                 1664314  1670214  99.646752     0.361619
 ```
 
-*Çıkarımlar* :  Atılabilir.
+*Inferences* : It can be thrown away.
 
 
 
@@ -80,7 +80,7 @@ NFLAG_LAST_APPL_IN_DAY    Count      Ratio  TARGET_MEAN
 
 ------
 
-Müşterinin önceki uygulama için ödemeyi seçtiği ödeme yöntemi
+The payment method the customer chose to pay for the previous application
 
 ```python
 NAME_PAYMENT_TYPE    Count  /
@@ -96,7 +96,7 @@ Non-cash from your account                  0.490536     0.149152
 XNA                                        37.563091     0.661577  
 ```
 
-*Çıkarımlar* : Ratiosu düşük iki değerin target değerleri birbirine yakın gruplandırılması değerlendirilebilir.
+*Inferences* : It can be evaluated if two values with low ratio are grouped close to each other.
 
 
 
@@ -104,7 +104,7 @@ XNA                                        37.563091     0.661577
 
 ------
 
-Önceki başvuru neden reddedildi
+Why was the previous application rejected?
 
 ```python
  CODE_REJECT_REASON    Count      Ratio  TARGET_MEAN
@@ -119,7 +119,7 @@ XAP                1353093  1670214  81.013152     0.233776
 XNA                   5244  1670214   0.313972     0.998474
 ```
 
-*Çıkarımlar* : Temerrüte düşenler gruplanabilir. Feature importance tablosuna bakarak değerlendirilecek.
+*Inferences* : The defaults can be grouped. It will be evaluated by looking at the feature importance table.
 
 
 
@@ -127,7 +127,7 @@ XNA                   5244  1670214   0.313972     0.998474
 
 ------
 
-Önceki başvuru için başvururken müşteriye kim eşlik etti
+Who accompanied the client when applying for the previous application?
 
 ```python
 NAME_TYPE_SUITE : has 7 unique category 	- object
@@ -143,7 +143,7 @@ Other_A                     9077  1670214   0.543463     0.153795
 Group of people             2240  1670214   0.134115     0.214732
 ```
 
-*Çıkarımlar* :  önemsiz gözüküyor.
+*Inferences* :  It seems to be unnecessary.
 
 
 
@@ -151,7 +151,7 @@ Group of people             2240  1670214   0.134115     0.214732
 
 ------
 
-Önceki uygulama için başvururken müşteri eski mi yoksa yeni müşteri miydi
+Was the customer old or new when applying for the previous application?
 
 ```python
 NAME_CLIENT_TYPE : has 4 unique category 	- object
@@ -163,7 +163,7 @@ Repeater            1231261  1670214  73.718757     0.449208
 XNA                    1941  1670214   0.116213     0.685214
 ```
 
-*Çıkarımlar* :  Yeni müşterilerin temerrüte düşme oranı düşük.
+*Inferences* : The default rate of new customers is low.
 
 
 
@@ -171,7 +171,7 @@ XNA                    1941  1670214   0.116213     0.685214
 
 ------
 
-Önceki NAKİT, POS, ARAÇ,… uygulamasıydı.
+Previous was CASH, POS, VEHICLE,… application.
 
 ```python
 NAME_PORTFOLIO : has 5 unique category 	- object
@@ -184,15 +184,13 @@ POS            691011  1670214  41.372603     0.092465
 XNA            372230  1670214  22.286366     0.931419
 ```
 
-*Çıkarımlar* : Target mean değerleri birbirine yakın olan cards/cars/cash degerleri bir araya getirilebilir.
-
-
+*Inferences* : Cards / cars / cash values whose **target** mean values are close to each other can be combined.
 
 ##### NAME_PRODUCT_TYPE
 
 ------
 
-Önceki uygulama x-sell o walk-in miydi
+Previous app x-sell was it walk-in
 
 ```python
 NAME_PRODUCT_TYPE : has 3 unique category 	- object
@@ -203,7 +201,7 @@ walk-in             150261  1670214   8.996512     0.516455
 x-sell              456287  1670214  27.319074     0.260003
 ```
 
-*Çıkarımlar* : Na değerlerin fazla olduğu görülüyor.
+*Inferences* : It seems that the NaN values are high.
 
 
 
@@ -211,7 +209,7 @@ x-sell              456287  1670214  27.319074     0.260003
 
 ------
 
-Önceki uygulamanın müşterisinin satış alanı
+Sales area of the previous application's customer
 
 ```python
 CHANNEL_TYPE : has 8 unique category 	- object
@@ -227,7 +225,7 @@ Regional / Local                  108528  1670214   6.497850     0.105236
 Stone                             212083  1670214  12.697954     0.103992
 ```
 
-*Çıkarımlar* :  Birbirine yakın degiskenler gruplanabilir.
+*Inferences* :  Variables close to each other can be grouped.
 
 
 
@@ -235,7 +233,7 @@ Stone                             212083  1670214  12.697954     0.103992
 
 ------
 
-Faiz oranı, önceki uygulamanın küçük orta ve yüksek olarak gruplandırılması
+Interest rate, grouping previous application into small medium and high
 
 ```python
 NAME_YIELD_GROUP : has 5 unique category 	- object
@@ -248,7 +246,7 @@ low_normal            322095  1670214  19.284655     0.233987
 middle                385532  1670214  23.082791     0.161623
 ```
 
-*Çıkarımlar* :  low ve mid-high olarak iki parça haline getirilebilir.
+*Inferences* :  It can be made into two parts as **low and mid-high.**
 
 
 
@@ -256,7 +254,7 @@ middle                385532  1670214  23.082791     0.161623
 
 ------
 
-Müşteri önceki başvuru sırasında sigorta talep etti mi?
+Did the customer request insurance during the previous application?
 
 ```python
 NFLAG_INSURED_ON_APPROVAL : has 2 unique category 	- float64
@@ -267,7 +265,7 @@ NFLAG_INSURED_ON_APPROVAL : has 2 unique category 	- float64
 NaN                     673065  1670214       NaN          NaN
 ```
 
-*Çıkarımlar* : Atılabilir.
+*Inferences* : It can be troughtaway.
 
 
 
@@ -279,9 +277,9 @@ NaN                     673065  1670214       NaN          NaN
 
 ------
 
-![](./images/days_desicion.png)
+![](C:\Users\acer\Desktop\HomeCreditDefaultRisk\TablesAnalysisReport\Previous_Application\images\days_desicion.png)
 
-*Çıkarımlar* : -500 den büyük değerlerin temerrüte düşme oranları yüksek .
+*Inferences* : Values greater than -500 have high rates of default.
 
 
 
@@ -289,9 +287,9 @@ NaN                     673065  1670214       NaN          NaN
 
 ------
 
-![](./images/cnt_payment.png)
+![](C:\Users\acer\Desktop\HomeCreditDefaultRisk\TablesAnalysisReport\Previous_Application\images\cnt_payment.png)
 
-*Çıkarımlar* : 5 ila 15 değerleri arasında temerrüte düşmeme durumunda ki olumlu farklılık gözlemlendi.
+*Inferences* : A positive difference in non-defaulting was observed between 5 and 15.
 
 
 
@@ -299,9 +297,9 @@ NaN                     673065  1670214       NaN          NaN
 
 ------
 
-![](./images/days_first_drawing.png)
+![](C:\Users\acer\Desktop\HomeCreditDefaultRisk\TablesAnalysisReport\Previous_Application\images\days_first_drawing.png)
 
-*Çıkarımlar* :  365.000 civarında'  ki değerlerin gün olarak bakıldığında anlamsiz olduğu görülüyor bu değerlere nan atamak mantıklı olacaktır.
+*Inferences* :  When the values around 365,000 are viewed as a day, it is seen that it is meaningless. It would be reasonable to assign nan to these values.
 
 
 
@@ -309,9 +307,9 @@ NaN                     673065  1670214       NaN          NaN
 
 ------
 
-![](./images/days_fırst_due.png)
+![](C:\Users\acer\Desktop\HomeCreditDefaultRisk\TablesAnalysisReport\Previous_Application\images\days_fırst_due.png)
 
-*Çıkarımlar* : 365.000 civarında'  ki değerlerin gün olarak bakıldığında anlamsiz olduğu görülüyor bu değerlere nan atamak mantıklı olacaktır.
+*Inferences* : When the values around 365,000 are viewed as a day, it is seen that it is meaningless. It would be reasonable to assign nan to these values.
 
 
 
@@ -319,9 +317,9 @@ NaN                     673065  1670214       NaN          NaN
 
 ------
 
-![](./images/days_last_due_1st_version.png)
+![](C:\Users\acer\Desktop\HomeCreditDefaultRisk\TablesAnalysisReport\Previous_Application\images\days_last_due_1st_version.png)
 
-*Çıkarımlar* : 365.000 civarında'  ki değerlerin gün olarak bakıldığında anlamsiz olduğu görülüyor bu değerlere nan atamak mantıklı olacaktır.
+*Inferences* : When the values around 365,000 are viewed as a day, it is seen that it is meaningless. It would be reasonable to assign nan to these values.
 
 
 
@@ -329,9 +327,9 @@ NaN                     673065  1670214       NaN          NaN
 
 ------
 
-![](./images/days_last_due.png)
+![](C:\Users\acer\Desktop\HomeCreditDefaultRisk\TablesAnalysisReport\Previous_Application\images\days_last_due.png)
 
-*Çıkarımlar* : 365.000 civarında'  ki değerlerin gün olarak bakıldığında anlamsiz olduğu görülüyor bu değerlere nan atamak mantıklı olacaktır.
+*Inferences* : When the values around 365,000 are viewed as a day, it is seen that it is meaningless. It would be reasonable to assign nan to these values.
 
 
 
@@ -339,7 +337,15 @@ NaN                     673065  1670214       NaN          NaN
 
 ------
 
-![](./images/days_termination.png)
+![](C:\Users\acer\Desktop\HomeCreditDefaultRisk\TablesAnalysisReport\Previous_Application\images\days_termination.png)
 
-*Çıkarımlar* : 365.000 civarında'  ki değerlerin gün olarak bakıldığında anlamsiz olduğu görülüyor bu değerlere nan atamak mantıklı olacaktır.
+*Inferences* : When the values around 365,000 are viewed as a day, it is seen that it is meaningless. It would be reasonable to assign nan to these values.
+
+------
+
+
+
+
+
+
 

@@ -2,9 +2,7 @@
 
 **CREDIT_CURRENCY**
 
-------
-
-Kategorilerdeki gözlem sayıları düşük oldugu için  0 ve 1 şeklinde ayarlandı.
+Since the number of observations in the categories is low, it was set as 0 and 1.
 
 ```python
 df.loc[(df["CREDIT_CURRENCY"] == "currency 1"),"CREDIT_CURRENCY"] = 0 "Current 1"
@@ -17,7 +15,7 @@ df.loc[(df["CREDIT_CURRENCY"] == "currency 4"),"CREDIT_CURRENCY"] = 1 "Current 4
 
 ------
 
-Bu değişkende **Sold** ve **Bad Debt**  sınıfları verisetinde az olmasından dolayı anlamlı bir farklılık sağlamıyor bu sebeple **Active** olarak atandı.
+In this variable, the **Sold ** and **Bad Debt ** classes do not provide a significant difference due to the smallness of the dataset, so are assigned as **Active **.
 
 ```python
 bureau.loc[(bureau["CREDIT_ACTIVE"] == "Bad debt"),"CREDIT_ACTIVE"] = "Active"
@@ -30,7 +28,7 @@ bureau.loc[(bureau["CREDIT_ACTIVE"] == "Sold"),"CREDIT_ACTIVE"] = "Active"
 
 ---
 
-Kredinin kaç kez uzatıldıgını gösteren değişken. 
+Variable indicating how many times the loan has been extended.
 
 ```python
 CNT_CREDIT_PROLONG : has 10 unique category 	- int64
@@ -48,11 +46,11 @@ CNT_CREDIT_PROLONG : has 10 unique category 	- int64
 7                   1  1716428  0.000
 ```
 
-0. sınıf hariç anlamlı bir çeşitlilik sağlamadığı için 0 ve 1 şeklinde binary encoding uygulandı.
+0. Binary encoding is applied as 0 and 1 because it does not provide a meaningful variety except for class.
 
 ```python
-df.loc[(df["CNT_CREDIT_PROLONG"] == 0),"CNT_CREDIT_PROLONG"] = 0 #diğer yerlerdeki kredisini uzatmamış kişiler
-df.loc[(df["CNT_CREDIT_PROLONG"] != 0),"CNT_CREDIT_PROLONG"] = 1 #diğer yerlerdeki kredisini uzatmış kişiler
+df.loc[(df["CNT_CREDIT_PROLONG"] == 0),"CNT_CREDIT_PROLONG"] = 0 #people who have not extended their credit in other places
+df.loc[(df["CNT_CREDIT_PROLONG"] != 0),"CNT_CREDIT_PROLONG"] = 1 #people who have extended their credit in other places
 ```
 
 
@@ -61,7 +59,7 @@ df.loc[(df["CNT_CREDIT_PROLONG"] != 0),"CNT_CREDIT_PROLONG"] = 1 #diğer yerlerd
 
 ------
 
-Kredi tipini gösteren değişken 15 kategorisi var ;
+There are 15 categories of variables that show the loan type;
 
 ```python
 CREDIT_TYPE : has 15 unique category    - object                                              CREDIT_TYPE    Count Ratio  
@@ -71,7 +69,7 @@ CREDIT_TYPE : has 15 unique category    - object                                
       18391  1716428  1.071   Mortgage                                  
 ```
 
-%1 in altında olan kategorilerine rare encoding uygulayacagız.
+We will apply rare encoding to categories below 1%.
 
 ```python
 bureau.loc[(bureau["CREDIT_TYPE"] == "Microloan"),"CREDIT_TYPE"] = "Rare"
@@ -92,7 +90,7 @@ bureau.loc[(bureau["CREDIT_TYPE"] == "Loan for the purchase of equipment"),"CRED
 
 **Feature1**
 
-**Bir müşterinin  farklı olarak sahip oldugu kredi sayısı :**
+**The number of credits a customer has differently:**
 
 **BUREAU_LOAN_COUNT**
 
@@ -104,7 +102,7 @@ bureau.loc[(bureau["CREDIT_TYPE"] == "Loan for the purchase of equipment"),"CRED
 grp = df[['SK_ID_CURR', 'DAYS_CREDIT']].groupby(by = ['SK_ID_CURR'])['DAYS_CREDIT'].count().reset_index().rename(index=str, columns={'DAYS_CREDIT': 'BUREAU_LOAN_COUNT'})
 ```
 
-Ve bu sonucları tabloya ekliyoruz.
+And we add these results to the table.
 
 ```python
 df = df.merge(grp, on = ['SK_ID_CURR'], how = 'left')
@@ -114,7 +112,7 @@ df = df.merge(grp, on = ['SK_ID_CURR'], how = 'left')
 
 **Feature2**
 
- **Bir müşterinin kaç farklı tipte krediye sahip oldugu :**
+ **How many different types of loans a customer has :**
 
 **BUREAU_LOAN_TYPES**
 
@@ -126,7 +124,7 @@ df = df.merge(grp, on = ['SK_ID_CURR'], how = 'left')
 grp = df[['SK_ID_CURR', 'CREDIT_TYPE']].groupby(by = ['SK_ID_CURR'])['CREDIT_TYPE'].nunique().reset_index().rename(index=str, columns={'CREDIT_TYPE': 'BUREAU_LOAN_TYPES'})
 ```
 
-Ve bu sonucları tabloya ekliyoruz.
+And we add these results to the table.
 
 ```python
 df = df.merge(grp, on = ['SK_ID_CURR'], how = 'left')
@@ -136,25 +134,25 @@ df = df.merge(grp, on = ['SK_ID_CURR'], how = 'left')
 
 **Feature3**  
 
-**Bir müşterinin aldıgı farklı kredi türlerinin oranı :**
+**The ratio of different types of loans a customer takes:**
 
 **AVERAGE_LOAN_TYPE**
 
 ------
 
-Bir kişinin kaç farklı tipte krediye sahip olduğuna önceki featuredan biliyorduk loan types.
+We knew from the previous feature how many different types of credits a person had. (loan types)
 
 ```python
 grp = df[['SK_ID_CURR', 'CREDIT_TYPE']].groupby(by = ['SK_ID_CURR'])['CREDIT_TYPE'].nunique().reset_index().rename(index=str, columns={'CREDIT_TYPE': 'BUREAU_LOAN_TYPES'})
 ```
 
-Oranı bulmak için
+To find the ratio
 
 ```python
 df['AVERAGE_LOAN_TYPE'] = df['BUREAU_LOAN_COUNT']/df['BUREAU_LOAN_TYPES'] 
 ```
 
-Ve bu sonucları tabloya ekliyoruz.
+And we add these results to the table.
 
 ```python
 df = df.merge(grp, on = ['SK_ID_CURR'], how = 'left')
@@ -165,15 +163,15 @@ del df['BUREAU_LOAN_COUNT'], df['BUREAU_LOAN_TYPES']
 
 **Feature4** 
 
-**Bureau datasındaki aktif durumda olan kredilerin diğer kredilerine göre yüzdesi :**
+**Percentage of active loans compared to other loans in Bureau data:**
 
 **ACTIVE_LOANS_PERCENTAGE**
 
 ------
 
-Bu değişkende sonucların 1 e yakın olması bizim için kötü bir durum aktif olan kredilerinin fazla oldugunu bize gösteriyor.
+The fact that the results are close to 1 in this variable shows us that their active loans are too bad for us.
 
-Kredi aktif mi değil mi diye ayırmak  için  yeni bir değişken olusturuyoruz
+We create a new variable to separate whether the loan is active or not.
 
 ```python
 df['CREDIT_ACTIVE_BINARY'] = df['CREDIT_ACTIVE']
@@ -182,14 +180,14 @@ df.loc[(B['CREDIT_ACTIVE'] == "Closed"), 'CREDIT_ACTIVE_BINARY'] = 0 df.loc[(B['
       
 ```
 
-Müşteri başına AKTİF olan ortalama kredi sayısını hesaplayın
+Calculate the average number of **ACTIVE** loans per customer
 
 ```python
 ['CREDIT_ACTIVE_BINARY'] = df['CREDIT_ACTIVE_BINARY'].astype('int32')# Mgrp = df.groupby(by = ['SK_ID_CURR'])
 ['CREDIT_ACTIVE_BINARY'].mean().reset_index().rename(index=str, columns={'CREDIT_ACTIVE_BINARY': 'ACTIVE_LOANS_PERCENTAGE'})
 ```
 
-Ve bu sonucları tabloya ekliyoruz.
+And we add these results to the table.
 
 ```python
 df = df.merge(grp, on = ['SK_ID_CURR'], how = 'left') 
@@ -200,20 +198,20 @@ del df['CREDIT_ACTIVE_BINARY']
 
 **Feature5**
 
-**Bir kişinin kaç gün aralıklar ile yeni krediler aldıgını bulmak icin :**
+**To find out how many days a person receives new loans: **
 
 **DAYS_CREDIT_DIFF**
 
 ------
 
-Bir kişinin aldığı farklı kredilerin alınma günleri sıraladık ;
+We have listed the days when the different loans a person gets;
 
 ```python
 grp = B[['SK_ID_CURR', 'SK_ID_BUREAU', 'DAYS_CREDIT']].groupby(by = ['SK_ID_CURR'])
 grp1 = grp.apply(lambda x: x.sort_values(['DAYS_CREDIT'], ascending = False)).reset_index(drop = True)#rename(index = str, columns = {'DAYS_CREDIT': 'DAYS_CREDIT_DIFF'})
 ```
 
-Krediler arasında ki gün farkı hesaplanıyor ;
+The difference in days between credits is calculated;
 
 ```python
 grp1['DAYS_CREDIT1'] = grp1['DAYS_CREDIT']*-1
@@ -222,7 +220,7 @@ grp1['DAYS_DIFF'] = grp1['DAYS_DIFF'].fillna(0).astype('uint32')
 del grp1['DAYS_CREDIT1'], grp1['DAYS_CREDIT'], grp1['SK_ID_CURR']
 ```
 
-Ve bu sonucları ana tabloya ekliyoruz ;
+And we add these results to the main table;
 
 ```python
 B = B.merge(grp1, on = ['SK_ID_BUREAU'], how = 'left')
@@ -232,34 +230,34 @@ B = B.merge(grp1, on = ['SK_ID_BUREAU'], how = 'left')
 
 **Feature6**
 
-**Müşteri bazlı ödemesi devam eden kredi sayılarının ortalamaları**
+**Average of the number of loans with continuing payments on a customer basis **
 
 **CREDIT_ENDDATE_PERCENTAGE**
 
 ------
 
-Burada sonuçlarımızın 1 e yakın olması kötüye işaret.
+The fact that our results are close to 1 here is a bad sign.
 
-Yeni bir değişken oluşturuyoruz.
+We create a new variable.
 
 ```python
 B['CREDIT_ENDDATE_BINARY'] = B['DAYS_CREDIT_ENDDATE']
 ```
 
-Odemesi bitmiş (Closed) kredilere "0" , ödemesi devam eden (Active) kredilere 1 veriyoruz.
+We give "0" to closed loans, and 1 to active loans.
 
 ```python
 B.loc[(B['DAYS_CREDIT_ENDDATE'] < 0),"CREDIT_ENDDATE_BINARY"] = 0 
 B.loc[(B['DAYS_CREDIT_ENDDATE'] >= 0),"CREDIT_ENDDATE_BINARY"] = 1
 ```
 
-Ödemesi devam eden kredi sayısının ortalamaları sonuc 1 e yakın ise bizim için kötü yani çok fazla aktif krediye sahip , 0 a yakın ise sonuç bizim için iyi yani daha az aktip kredisi var.
+If the average result of the number of loans that continue to be paid is close to 1, it is bad for us, that is, it has too many active loans, and if it is close to 0, the result is good for us, so there are less actype loans.
 
 ```python
 grp = B.groupby(by = ['SK_ID_CURR'])['CREDIT_ENDDATE_BINARY'].mean().reset_index().rename(index=str, columns={'CREDIT_ENDDATE_BINARY': 'CREDIT_ENDDATE_PERCENTAGE'})
 ```
 
-Ve bu sonucları ana tabloya ekliyoruz.
+And we add these results to the main table.
 
 ```python
 B = B.merge(grp, on = ['SK_ID_CURR'], how = 'left') 
@@ -271,19 +269,16 @@ del B['CREDIT_ENDDATE_BINARY'] #gereksiz olan binary columnun düşürülmesi
 
 **Feature7**
 
-**Ödenen borç yüzdesi**
+**Percentage of debt paid**
 
 **NEW_AMT_PER_PAY**
 
 ------
 
-0'a yakın olması iyi  1 e yakın olması kötü tıpkı Target gibi
-
-AMT_CREDIT_SUM toplam kredi miktarını gösteriyor.
-
-AMT_CREDIT_SUM_DEBT ise kalan borç tutarını gösteriyor.
-
-Tek müşterinin eksi kredilerinin tamamına mean atılabilir. (ödenen borç yüzdelerine)
+- Its close to 0 is good, close to 1 is bad just like **Target**
+- AMT_CREDIT_SUM shows the total credit amount.
+- AMT_CREDIT_SUM_DEBT shows the remaining debt amount.
+- It can be meant to all minus credits of a single customer. (to percentage of debt paid)
 
 ```python
 df[NEW_AMT_PER_PAY]= 1 - ((df["AMT_CREDIT_SUM"]- df["AMT_CREDIT_SUM_DEBT"]) / df["AMT_CREDIT_SUM"])
@@ -293,7 +288,7 @@ df[NEW_AMT_PER_PAY]= 1 - ((df["AMT_CREDIT_SUM"]- df["AMT_CREDIT_SUM_DEBT"]) / df
 
 **Feature8**
 
-##### Ödenmemiş krediler arasındaki gün farkları
+##### Day differences between outstanding loans
 
 ##### DAYS_ENDDATE_DIFF
 
@@ -302,38 +297,38 @@ df[NEW_AMT_PER_PAY]= 1 - ((df["AMT_CREDIT_SUM"]- df["AMT_CREDIT_SUM_DEBT"]) / df
 
 
 ```python
-#NOT: Groupby aggregation işleminde mean ve sum alınabilir
+#NOTE: You can import mean and sum in Groupby aggregation operation.
 
 B = bureau[0:10000]
 B['CREDIT_ENDDATE_BINARY'] = B['DAYS_CREDIT_ENDDATE']
 
-# Ödemesi devam edenler(+) ve ödemesi bitmiş olanlar(0 veya -) değerler belirtiliyor
-B.loc[(bureau["DAYS_CREDIT_ENDDATE"] <= 0), "CREDIT_ENDDATE_BINARY"] = 0 #ödemesi bitmiş (Closed) krediler
-B.loc[(bureau["DAYS_CREDIT_ENDDATE"] > 0), "CREDIT_ENDDATE_BINARY"] = 1 #ödemesi devam eden (Active) krediler
+#Values for those whose payments are continuing (+) and those whose payments are over (0 or -)
+B.loc[(bureau["DAYS_CREDIT_ENDDATE"] <= 0), "CREDIT_ENDDATE_BINARY"] = 0 #overpaid (Closed) loans
+B.loc[(bureau["DAYS_CREDIT_ENDDATE"] > 0), "CREDIT_ENDDATE_BINARY"] = 1 #Active loans
 
-#Ödemesi devam eden krediler üzerinde işlem yapılacak
+# Operation will be made on credits with ongoing payments
 B1 = B[B['CREDIT_ENDDATE_BINARY'] == 1]
 
-#Ödemesi tamamlanmaya krediler arasındaki gün farklarının hesaplanması
+# Calculation of the day difference between loans to completion
 
 # Create Dummy Column for CREDIT_ENDDATE 
 B1['DAYS_CREDIT_ENDDATE1'] = B1['DAYS_CREDIT_ENDDATE']
 # Groupby Each Customer ID 
 grp = B1[['SK_ID_CURR', 'SK_ID_BUREAU', 'DAYS_CREDIT_ENDDATE1']].groupby(by = ['SK_ID_CURR'])
-# Kredi ödeme sürelerinin kişi özelinde küçükten büyüğe sıralanması
+# Sorting of loan payment periods from small to large.
 grp1 = grp.apply(lambda x: x.sort_values(['DAYS_CREDIT_ENDDATE1'], ascending = True)).reset_index(drop = True) 
 del grp
 gc.collect()
 print("Grouping and Sorting done")
 
-# diff fonksiyonunda ilk satırlarda gelen nan valuler 0 ile dolduruldu.
+#In the  diff function, the nan values in the first lines are filled with 0.
 grp1['DAYS_ENDDATE_DIFF'] = grp1.groupby(by = ['SK_ID_CURR'])['DAYS_CREDIT_ENDDATE1'].diff()
 grp1['DAYS_ENDDATE_DIFF'] = grp1['DAYS_ENDDATE_DIFF'].fillna(0).astype('uint32')
 del grp1['DAYS_CREDIT_ENDDATE1'], grp1['SK_ID_CURR']
 gc.collect()
 print("Difference days calculated")
 
-# ana tablo ile birleştirilmesi
+# merging with the main table
 B = B.merge(grp1, on = ['SK_ID_BUREAU'], how = 'left')
 del grp1
 gc.collect()
@@ -344,7 +339,7 @@ gc.collect()
 
 **Feature9**
 
-**Kişinin toplam gecikmiş borcunun toplam mevcut borcuna oranı**
+**The ratio of the person's total overdue debt to the total current debt **
 
 **OVERDUE_DEBT_RATIO**
 
@@ -352,13 +347,13 @@ gc.collect()
 
 B = df[0:10000]
 
-nan değerler borç yok olarak alındı.
+The **NaN** values are taken as no debt.
 
 ```python
 B['AMT_CREDIT_SUM_DEBT'] = B['AMT_CREDIT_SUM_DEBT'].fillna(0)
 ```
 
-nan değerler gecikme yok olarak alındı.
+**NaN** values received as no delay.
 
 ```python
 B['AMT_CREDIT_SUM_OVERDUE'] = B['AMT_CREDIT_SUM_OVERDUE'].fillna(0) 
@@ -366,13 +361,13 @@ B['AMT_CREDIT_SUM_OVERDUE'] = B['AMT_CREDIT_SUM_OVERDUE'].fillna(0)
 
 ```
 
-grp1 bir kişinin toplam borcu
+grp1 total debt of a person
 
 ```python
 grp1 = B[['SK_ID_CURR', 'AMT_CREDIT_SUM_DEBT']].groupby(by = ['SK_ID_CURR'])['AMT_CREDIT_SUM_DEBT'].sum().reset_index().rename( index = str, columns = {'AMT_CREDIT_SUM_DEBT': 'TOTAL_CUSTOMER_DEBT'})
 ```
 
-grp2 bir kişinin toplam gecikmiş borcu
+grp2 total outstanding debt of a person
 
 ```python
 grp2 = B[['SK_ID_CURR', 'AMT_CREDIT_SUM_OVERDUE']].groupby(by = ['SK_ID_CURR'])['AMT_CREDIT_SUM_OVERDUE'].sum().reset_index().rename( index = str, columns = {'AMT_CREDIT_SUM_OVERDUE': 'TOTAL_CUSTOMER_OVERDUE'})
@@ -380,40 +375,40 @@ grp2 = B[['SK_ID_CURR', 'AMT_CREDIT_SUM_OVERDUE']].groupby(by = ['SK_ID_CURR'])[
 
 ```
 
-Ve sonuclarımızı ana tabloya ekliyoruz.
+And we add our results to the main table.
 
 ```python
 B = B.merge(grp1, on = ['SK_ID_CURR'], how = 'left')
 B = B.merge(grp2, on = ['SK_ID_CURR'], how = 'left')
 ```
 
-Artık işimize yaramayacak degikenleri siliyoruz.
+We delete variables that will no longer work for us.
 
 ```python
 del grp1, grp2
 gc.collect()
 ```
 
-kişinin toplam gecikmiş borcunun, toplam borcuna oranı
+the ratio of the customer's total outstanding debt to total debt
 
 ```python
 B['OVERDUE_DEBT_RATIO'] = B['TOTAL_CUSTOMER_OVERDUE']/B['TOTAL_CUSTOMER_DEBT'] 
 ```
 
-Gereksiz üretilen sütunlar kaldırıldı
+Unnecessary generated columns are removed
 
 ```python
 del B['TOTAL_CUSTOMER_OVERDUE'], B['TOTAL_CUSTOMER_DEBT'] 
 gc.collect()
 ```
 
-Bu adımdan sonra One Hot Encoding uygulayarak kategorik değiskenlerimizi numeric hale getiriyoruz.
+After this step, we make our categorical variables numeric by applying One Hot Encoding.
 
 ```python
 bureau, bureau_cat = one_hot_encoder(bureau, nan_as_category=True)
 ```
 
-Devamında ise Bureau setimiz için numeric feature'ler türetiyoruz.
+Later, we derive numeric features for our Bureau set.
 
 ```python
 num_aggregations = {
@@ -441,7 +436,7 @@ num_aggregations = {
 }
 ```
 
-Categoric Featuerlar için ;
+For Categoric Featuers;
 
 ```python
 cat_aggregations = {}
@@ -450,19 +445,19 @@ for cat in bureau_cat: cat_aggregations[cat] = ['mean']
 #Sadece bureau ile ilgilendigimiz icin bb'sı almıyoruz
 ```
 
-Sonrasında bu türettiğimiz degiskenler ile bureau'yu groupby'layacagız.
+Then we will groupby the bureau with these variables we derive.
 
 ```python
 bureau_agg = bureau.groupby('SK_ID_CURR').agg({**num_aggregations, **cat_aggregations})
 ```
 
-Urettigimiz yeni degiskenlerin anlasılması icin onlerine BURO eklemek istiyoruz.
+We would like to add BURO to the new variables we have introduced so that they can be understood.
 
 ```python
 bureau_agg.columns = pd.Index(['BURO_' + e[0] + "_" + e[1].upper() for e in bureau_agg.columns.tolist()])
 ```
 
-Model öncesi değişken sayıları:
+Pre-model variable numbers:
 
 ```python
 train_df.shape
@@ -474,13 +469,15 @@ test_df.shape
 
 
 
-##### *Model Sonucu*:
+##### * Model Result *:
 
 ------
 
-![](./images/basemodel.png)
+![](C:\Users\acer\Desktop\HomeCreditDefaultRisk\TablesAnalysisReport\Bureau\images\basemodel.png)
 
-![](./images/importancelast.png)
+![](C:\Users\acer\Desktop\HomeCreditDefaultRisk\TablesAnalysisReport\Bureau\images\importancelast.png)
 
 ------
+
+
 

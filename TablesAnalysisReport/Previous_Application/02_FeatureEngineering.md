@@ -6,7 +6,7 @@
 
 ------
 
-Değişkeni incelendiğinde "365243" degerinin bir çok fazla sayıda girildiğini gördük. Önce bunun gürültü olabileceğini sonrasında ise NaN değerler yerine yazıldığı kanısına vardık. Bu sebeple bu değeri NaN olarak değiştirildi.
+When the variable was examined, we saw that the value **"365243"** was entered in too many numbers. We first came to the conclusion that it might be noise and then it was written instead of **NaN** values. For this reason, this value has been changed to **NaN.**
 
 ```python
 prev['DAYS_FIRST_DRAWING'].replace(365243, np.nan, inplace= True)
@@ -18,7 +18,7 @@ prev['DAYS_FIRST_DRAWING'].replace(365243, np.nan, inplace= True)
 
 ------
 
-Yine aynı durum geçerli "365243" değeri görülüyor bu değerler NaN olarak değiştirildi.
+The same is true, the value of **"365243"** is seen. These values have been changed to **NaN.**
 
 ```python
 prev['DAYS_FIRST_DUE'].replace(365243, np.nan, inplace= True)
@@ -30,7 +30,7 @@ prev['DAYS_FIRST_DUE'].replace(365243, np.nan, inplace= True)
 
 ------
 
-Burada da benzer bir durum söz konusu aynı değeri görmekteyiz, bu değer NaN hale getirildi.
+A similar situation here, we see the same value in question, this value has been made **NaN.**
 
 ```python
  prev['DAYS_LAST_DUE_1ST_VERSION'].replace(365243, np.nan, inplace= True)
@@ -42,7 +42,7 @@ Burada da benzer bir durum söz konusu aynı değeri görmekteyiz, bu değer NaN
 
 ------
 
-Aynı değer NaN olarak değiştirildi.
+The same value has been changed to **NaN.**
 
 ```python
  prev['DAYS_LAST_DUE'].replace(365243, np.nan, inplace= True)
@@ -54,7 +54,7 @@ Aynı değer NaN olarak değiştirildi.
 
 ------
 
-Aynı değer NaN olarak değiştirildi.
+The same value has been changed to **NaN.**
 
 ```python
 prev['DAYS_TERMINATION'].replace(365243, np.nan, inplace= True)
@@ -62,7 +62,7 @@ prev['DAYS_TERMINATION'].replace(365243, np.nan, inplace= True)
 
 
 
-### Atılmasına Karar Verilen Değişkenler 
+### Variables Decided to be Discarded
 
 - FLAG_LAST_APPL_PER_CONTRACK
 - NFLAG_LAST_APPL_IN_DAY
@@ -84,7 +84,7 @@ prev['DAYS_TERMINATION'].replace(365243, np.nan, inplace= True)
 
 
 
-### Az Rastlanan Değişkenler Kendilerine Yakın Sınıflara Aktarıldılar
+### Less Encountered Variables Transferred to Classes Close to Them
 
 ##### NAME_PAYMENT_TYPE
 
@@ -206,7 +206,7 @@ XNA            372230  1670214  22.286366     0.931419
 
 
 
-###### Kabul Edilme ya da Edilmeme durumuna göre "NAME_CONTRACT_STATUS" degiskeni ikiye ayrıldı ve verisetini değerlendirmek amacıyla target olarak kullanıldı.
+###### The "NAME_CONTRACT_STATUS" variable was divided into two according to whether it was Accepted or Not and was used as a **target** to evaluate the dataset.
 
 ```python
 prev.loc[(prev["NAME_CONTRACT_STATUS"] == "Approved"),"NAME_CONTRACT_STATUS"] = 0
@@ -230,7 +230,7 @@ prev["NAME_CONTRACT_STATUS"] = prev["NAME_CONTRACT_STATUS"].astype("int")
 
 ------
 
-Müşterinin istediği kredinin aldığı krediye oranı ile elde edilir.
+It is obtained by the ratio of the loan requested by the customer to the loan received.
 
 ```python
 prev['NEW_APP_CREDIT_PERC'] = prev['AMT_APPLICATION'] / prev['AMT_CREDIT']
@@ -242,7 +242,7 @@ prev['NEW_APP_CREDIT_PERC'] = prev['AMT_APPLICATION'] / prev['AMT_CREDIT']
 
 ------
 
-Müşterinin cevap alma hızı ve onay durumlarının beraber değerlendirilmesi sonucunda elde edilir.
+It is obtained by evaluating the customer's response speed and approval status together.
 
 ```python
 prev["DAYS_DECISION2"] = prev["DAYS_DECISION"] * -1
@@ -259,11 +259,11 @@ prev.loc[((prev["NAME_CONTRACT_STATUS"] == "Refused" ) & (prev['ANS_SPEED'] == "
 
 
 
-**Feature 3* : **NEW_ANN/CDT**
+*Feature 3* : **NEW_ANN/CDT**
 
 ------
 
-Müşterinin maaşının kredi tutarına oranı ile elde edilir.
+It is obtained by the ratio of the customer's salary to the loan amount.
 
 ```python
 prev["NEW_ANN/CDT_PERC"] = prev["AMT_ANNUITY"] / prev["AMT_CREDIT"]
@@ -287,7 +287,7 @@ prev["NEW_CDT/PAY"] = prev["AMT_CREDIT"] / prev["CNT_PAYMENT"]
 
 ------
 
-Müşterinin geçmiş aylık kredi tutarının maaşına oranı     ***
+It is obtained by dividing the full amount of the loan by its maturity.   
 
 ```python
 prev["NEW_PAY_ABILITY_PERC"] = prev["NEW_CDT/PAY"] / prev["AMT_ANNUITY"] 
@@ -299,9 +299,11 @@ prev["NEW_PAY_ABILITY_PERC"] = prev["NEW_CDT/PAY"] / prev["AMT_ANNUITY"]
 
 ------
 
-Peşinatın maaşa oranı ile elde edilir.
+It is obtained by the ratio of down payment to salary.
 
 ```python
 prev["NEW_PAY_ANN/DOWN_PERC"] = prev["AMT_ANNUITY"] / prev["AMT_DOWN_PAYMENT"]
 ```
+
+
 
